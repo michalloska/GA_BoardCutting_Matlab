@@ -1,4 +1,5 @@
-function calculatedFitness = calculateFitnessFromDecodedChromes(p_decodedChromes, p_genNum)
+
+function calculatedFitness = calculateFitnessFromDecodedChromes(p_decodedChromes, p_genNum, p_currentPenaltyFactor)
     calculatedFitness = 0;
     l_mainPlank.posX = 0;
     l_mainPlank.posY = 0;
@@ -10,6 +11,9 @@ function calculatedFitness = calculateFitnessFromDecodedChromes(p_decodedChromes
     sumOfAllFitnesses = 0;
     PenaltyFit = 0;
     PenaltyFit_mainPlank = 0;
+    persistent l_penaltyFactor;
+
+    l_penaltyFactor = p_currentPenaltyFactor;
 
     for i = 1:length(p_decodedChromes)
         if p_decodedChromes(i).exists == 1
@@ -17,19 +21,18 @@ function calculatedFitness = calculateFitnessFromDecodedChromes(p_decodedChromes
         end
     end
 
-
     lenToIter = length(p_decodedChromes);
     for i = 1:lenToIter
         for j = i:lenToIter
             if j ~= i && p_decodedChromes(i).exists == 1 && p_decodedChromes(j).exists == 1
-                PenaltyFit = PenaltyFit + checkIfTwoRectsOverlap(p_decodedChromes(i), p_decodedChromes(j))^1.5;
+                PenaltyFit = PenaltyFit + checkIfTwoRectsOverlap(p_decodedChromes(i), p_decodedChromes(j))^l_penaltyFactor;
             end
         end
     end
 
     for i = 1:length(p_decodedChromes)
         if p_decodedChromes(i).exists == 1
-            PenaltyFit_mainPlank = PenaltyFit_mainPlank + (p_decodedChromes(i).area - checkIfTwoRectsOverlap(p_decodedChromes(i), l_mainPlank))^1.5;
+            PenaltyFit_mainPlank = PenaltyFit_mainPlank + (p_decodedChromes(i).area - checkIfTwoRectsOverlap(p_decodedChromes(i), l_mainPlank))^l_penaltyFactor;
         end
     end
     calculatedFitness = sumOfAllFitnesses - PenaltyFit - PenaltyFit_mainPlank;

@@ -1,5 +1,5 @@
 function nothingToReturn = drawChromosome(p_chromosomes, p_generationNum)
-    l_currentFitness = calculateFitnessFromDecodedChromes(p_chromosomes, p_generationNum);
+    l_currentFitness = calculateFitnessFromDecodedChromes(p_chromosomes, p_generationNum, 0);
     for i = 1:length(p_chromosomes)
         drawPlannedPlankExt(p_chromosomes(i).posX , p_chromosomes(i).posY , p_chromosomes(i).width , p_chromosomes(i).height , p_chromosomes(i).isRotated , p_chromosomes(i).exists, p_generationNum, l_currentFitness)
     end
